@@ -1,6 +1,6 @@
 type UserRole = "guest" | "member" | "admin";
 
-type User = {
+type Individual = {
   username: string;
   role: "guest" | "member" | "admin";
 };
