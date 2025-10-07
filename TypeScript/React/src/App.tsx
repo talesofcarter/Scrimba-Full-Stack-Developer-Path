@@ -1,9 +1,10 @@
 import { useState } from "react";
 import languages from "./languages";
 import clsx from "clsx";
-import { getFarewellText, getRandomWord } from "./utils";
+import { getRandomWord } from "./utils";
 import Header from "./components/Header";
 import ConfettiContainer from "./components/ConfettiContainer";
+import GameStatus from "./components/GameStatus";
 
 function App() {
   // state values
@@ -19,9 +20,7 @@ function App() {
     .every((letter: string) => guessedLetters.includes(letter));
   const isGameLost: boolean = wrongGuessCount >= languages.length - 1;
   const isGameOver: boolean = isGameWon || isGameLost;
-  const lastGuessedLetter: string = guessedLetters[guessedLetters.length - 1];
-  const isLastGuessIncorrect: boolean | string =
-    lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
+
   const alphabet = "qwertyuiopasdfghjklzxcvbnm";
 
   function addGuessedLetters(letter: string): void {
@@ -77,40 +76,6 @@ function App() {
     );
   });
 
-  const gameStatusClass = clsx("game-status", {
-    won: isGameWon,
-    lost: isGameLost,
-    farewell: !isGameOver && isLastGuessIncorrect,
-  });
-
-  function renderGameStatus() {
-    if (!isGameOver && isLastGuessIncorrect) {
-      return (
-        <p className={gameStatusClass}>
-          {getFarewellText(languages[wrongGuessCount - 1].name)}
-        </p>
-      );
-    }
-
-    if (isGameWon) {
-      return (
-        <>
-          <h1>You win!</h1>
-          <p>Well done!🎉</p>
-        </>
-      );
-    }
-    if (isGameLost) {
-      return (
-        <>
-          <h2>Game over!</h2>
-          <p>You lose! Better start learning Assembly</p>
-        </>
-      );
-    }
-    return null;
-  }
-
   function startNewGame(): void {
     setCurrentWord(getRandomWord());
     setGuessedLetters([]);
@@ -123,7 +88,7 @@ function App() {
     <main>
       {<ConfettiContainer isGameWon={isGameWon} />}
       <Header />
-      <section className={gameStatusClass}>{renderGameStatus()}</section>
+      <GameStatus currentWord={currentWord} guessedLetters={guessedLetters} />
 
       <section className="language-chips">{languagesElement}</section>
 
