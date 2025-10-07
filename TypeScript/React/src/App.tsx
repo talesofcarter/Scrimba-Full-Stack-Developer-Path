@@ -1,6 +1,5 @@
 import { useState } from "react";
 import languages from "./languages";
-import clsx from "clsx";
 import { getRandomWord } from "./utils";
 import Header from "./components/Header";
 import ConfettiContainer from "./components/ConfettiContainer";
@@ -8,6 +7,7 @@ import GameStatus from "./components/GameStatus";
 import LanguageChips from "./components/LanguageChips";
 import WordLetters from "./components/WordLetters";
 import NewGameButton from "./components/NewGameButton";
+import Keyboard from "./components/Keyboard";
 
 function App() {
   // state values
@@ -34,27 +34,6 @@ function App() {
     );
   }
 
-  const keyboard = alphabet.split("").map((letter) => {
-    const isGuessed = guessedLetters.includes(letter);
-    const isCorrect = isGuessed && currentWord.includes(letter);
-    const isWrong = isGuessed && !currentWord.includes(letter);
-    const className = clsx({
-      correct: isCorrect,
-      wrong: isWrong,
-    });
-
-    return (
-      <button
-        className={className}
-        onClick={() => addGuessedLetters(letter)}
-        key={letter}
-        disabled={isGameOver}
-      >
-        {letter.toUpperCase()}
-      </button>
-    );
-  });
-
   function startNewGame(): void {
     setCurrentWord(getRandomWord());
     setGuessedLetters([]);
@@ -77,7 +56,13 @@ function App() {
         isGameLost={isGameLost}
       />
 
-      <section className="keyboard">{keyboard}</section>
+      <Keyboard
+        alphabet={alphabet}
+        guessedLetters={guessedLetters}
+        currentWord={currentWord}
+        isGameOver={isGameOver}
+        addGuessedLetters={addGuessedLetters}
+      />
       <NewGameButton isGameOver={isGameOver} startNewGame={startNewGame} />
     </main>
   );
