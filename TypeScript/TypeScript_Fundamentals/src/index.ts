@@ -50,6 +50,21 @@ function placeOrder(pizzaName: string): Order | undefined {
   return newOrder;
 }
 
+function addToArray<Type>(array: Type[], item: Type): Type[] {
+  array.push(item);
+  return array;
+}
+
+addToArray(menu, { id: nextPizzaId++, name: "Chicken Bacon Ranch", price: 12 });
+addToArray<Order>(orderHistory, {
+  id: nextOrderId++,
+  pizza: menu[2].name,
+  status: "completed",
+});
+
+console.log(`This is the menu`, menu);
+console.log(`This is the order history`, orderHistory);
+
 function completeOrder(orderId: number): Order | undefined {
   const order = orderHistory.find((order) => order.id === orderId);
 
@@ -74,10 +89,6 @@ export function getPizzaDetail(identifier: string | number): Pizza | undefined {
     );
   }
 }
-
-addNewPizza({ name: "Chicken Bacon Ranch", price: 12 });
-addNewPizza({ name: "BBQ Chicken", price: 12 });
-addNewPizza({ name: "Spicy Sausage", price: 11 });
 
 placeOrder("Chicken Bacon Ranch");
 completeOrder(1);
