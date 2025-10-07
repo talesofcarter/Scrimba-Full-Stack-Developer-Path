@@ -25,8 +25,8 @@ function App() {
     lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
   const alphabet = "qwertyuiopasdfghjklzxcvbnm";
 
-  function addGuessedLetters(letter: string) {
-    setGuessedLetters((prevLetters) =>
+  function addGuessedLetters(letter: string): void {
+    setGuessedLetters((prevLetters: string[]): string[] =>
       prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
     );
   }
@@ -112,7 +112,7 @@ function App() {
     return null;
   }
 
-  function startNewGame() {
+  function startNewGame(): void {
     setCurrentWord(getRandomWord());
     setGuessedLetters([]);
   }
