@@ -1,35 +1,152 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import { useState } from "react";
+import languages from "./languages";
+import clsx from "clsx";
+import { getFarewellText, getRandomWord } from "./utils";
+import Confetti from "react-confetti";
 function App() {
-  const [count, setCount] = useState(0)
+  // state values
+  const [currentWord, setCurrentWord] = useState<string>((): string =>
+    getRandomWord()
+  );
+  const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+  // derived values
+  const wrongGuessCount = guessedLetters.filter(
+    (letter) => !currentWord.includes(letter)
+  ).length;
+  const isGameWon = currentWord
+    .split("")
+    .every((letter) => guessedLetters.includes(letter));
+  const isGameLost = wrongGuessCount >= languages.length - 1;
+  const isGameOver = isGameWon || isGameLost;
+  const lastGuessedLetter = guessedLetters[guessedLetters.length - 1];
+  const isLastGuessIncorrect =
+    lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
+
+  const alphabet = "qwertyuiopasdfghjklzxcvbnm";
+
+  function addGuessedLetters(letter) {
+    setGuessedLetters((prevLetters) =>
+      prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
+    );
+  }
+
+  const languagesElement = languages.map((language, index) => {
+    const isLangLost = index < wrongGuessCount;
+    const styles = {
+      backgroundColor: language.backgroundColor,
+      color: language.color,
+    };
+    const className = clsx("chip", isLangLost && "lost");
+    return (
+      <span className={className} style={styles} key={language.name}>
+        {language.name}
+      </span>
+    );
+  });
+
+  const letterElements = currentWord.split("").map((letter, index) => {
+    const shouldRevealLetter = isGameLost || guessedLetters.includes(letter);
+    const letterClassName = clsx(
+      isGameLost && !guessedLetters.includes(letter) && "missed-letter"
+    );
+    return (
+      <span className={letterClassName} key={index}>
+        {shouldRevealLetter ? letter.toUpperCase() : ""}
+      </span>
+    );
+  });
+
+  const keyboard = alphabet.split("").map((letter) => {
+    const isGuessed = guessedLetters.includes(letter);
+    const isCorrect = isGuessed && currentWord.includes(letter);
+    const isWrong = isGuessed && !currentWord.includes(letter);
+    const className = clsx({
+      correct: isCorrect,
+      wrong: isWrong,
+    });
+
+    return (
+      <button
+        className={className}
+        onClick={() => addGuessedLetters(letter)}
+        key={letter}
+        disabled={isGameOver}
+      >
+        {letter.toUpperCase()}
+      </button>
+    );
+  });
+
+  const gameStatusClass = clsx("game-status", {
+    won: isGameWon,
+    lost: isGameLost,
+    farewell: !isGameOver && isLastGuessIncorrect,
+  });
+
+  function renderGameStatus() {
+    if (!isGameOver && isLastGuessIncorrect) {
+      return (
+        <p className={gameStatusClass}>
+          {getFarewellText(languages[wrongGuessCount - 1].name)}
         </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      );
+    }
+
+    if (isGameWon) {
+      return (
+        <>
+          <h1>You win!</h1>
+          <p>Well done!🎉</p>
+        </>
+      );
+    }
+    if (isGameLost) {
+      return (
+        <>
+          <h2>Game over!</h2>
+          <p>You lose! Better start learning Assembly</p>
+        </>
+      );
+    }
+    return null;
+  }
+
+  function startNewGame() {
+    setCurrentWord(getRandomWord());
+    setGuessedLetters([]);
+  }
+
+  function renderRemainingGuesses() {
+    return <p className="hint">Remaining Guesses: {8 - wrongGuessCount}</p>;
+  }
+  return (
+    <main>
+      {isGameWon && <Confetti />}
+      <header>
+        <h1>Assembly: Endgame</h1>
+        <p>
+          Guess the word within 8 attempts to keep the programming world safe
+          from Assembly!
+        </p>
+      </header>
+      <section className={gameStatusClass}>{renderGameStatus()}</section>
+
+      <section className="language-chips">{languagesElement}</section>
+
+      <section className="hint">{renderRemainingGuesses()}</section>
+
+      <section className="word">{letterElements}</section>
+
+      <section className="keyboard">{keyboard}</section>
+
+      {isGameOver && (
+        <button onClick={startNewGame} className="new-game">
+          New Game
+        </button>
+      )}
+    </main>
+  );
 }
 
-export default App
+export default App;
