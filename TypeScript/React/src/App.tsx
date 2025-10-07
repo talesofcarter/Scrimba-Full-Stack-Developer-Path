@@ -3,6 +3,7 @@ import languages from "./languages";
 import clsx from "clsx";
 import { getFarewellText, getRandomWord } from "./utils";
 import Confetti from "react-confetti";
+
 function App() {
   // state values
   const [currentWord, setCurrentWord] = useState<string>((): string =>
@@ -11,21 +12,20 @@ function App() {
   const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
 
   // derived values
-  const wrongGuessCount = guessedLetters.filter(
-    (letter) => !currentWord.includes(letter)
+  const wrongGuessCount: number = guessedLetters.filter(
+    (letter: string): boolean => !currentWord.includes(letter)
   ).length;
-  const isGameWon = currentWord
+  const isGameWon: boolean = currentWord
     .split("")
-    .every((letter) => guessedLetters.includes(letter));
-  const isGameLost = wrongGuessCount >= languages.length - 1;
-  const isGameOver = isGameWon || isGameLost;
-  const lastGuessedLetter = guessedLetters[guessedLetters.length - 1];
-  const isLastGuessIncorrect =
+    .every((letter: string) => guessedLetters.includes(letter));
+  const isGameLost: boolean = wrongGuessCount >= languages.length - 1;
+  const isGameOver: boolean = isGameWon || isGameLost;
+  const lastGuessedLetter: string = guessedLetters[guessedLetters.length - 1];
+  const isLastGuessIncorrect: boolean | string =
     lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
-
   const alphabet = "qwertyuiopasdfghjklzxcvbnm";
 
-  function addGuessedLetters(letter) {
+  function addGuessedLetters(letter: string) {
     setGuessedLetters((prevLetters) =>
       prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
     );
