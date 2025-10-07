@@ -3,6 +3,7 @@ import languages from "./languages";
 import clsx from "clsx";
 import { getFarewellText, getRandomWord } from "./utils";
 import Confetti from "react-confetti";
+import Header from "./components/Header";
 
 function App() {
   // state values
@@ -123,13 +124,7 @@ function App() {
   return (
     <main>
       {isGameWon && <Confetti />}
-      <header>
-        <h1>Assembly: Endgame</h1>
-        <p>
-          Guess the word within 8 attempts to keep the programming world safe
-          from Assembly!
-        </p>
-      </header>
+      <Header />
       <section className={gameStatusClass}>{renderGameStatus()}</section>
 
       <section className="language-chips">{languagesElement}</section>
