@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import ConfettiContainer from "./components/ConfettiContainer";
 import GameStatus from "./components/GameStatus";
 import LanguageChips from "./components/LanguageChips";
+import WordLetters from "./components/WordLetters";
 
 function App() {
   // state values
@@ -31,18 +32,6 @@ function App() {
       prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
     );
   }
-
-  const letterElements = currentWord.split("").map((letter, index) => {
-    const shouldRevealLetter = isGameLost || guessedLetters.includes(letter);
-    const letterClassName = clsx(
-      isGameLost && !guessedLetters.includes(letter) && "missed-letter"
-    );
-    return (
-      <span className={letterClassName} key={index}>
-        {shouldRevealLetter ? letter.toUpperCase() : ""}
-      </span>
-    );
-  });
 
   const keyboard = alphabet.split("").map((letter) => {
     const isGuessed = guessedLetters.includes(letter);
@@ -81,8 +70,11 @@ function App() {
       <LanguageChips languages={languages} wrongGuessCount={wrongGuessCount} />
 
       <section className="hint">{renderRemainingGuesses()}</section>
-
-      <section className="word">{letterElements}</section>
+      <WordLetters
+        currentWord={currentWord}
+        guessedLetters={guessedLetters}
+        isGameLost={isGameLost}
+      />
 
       <section className="keyboard">{keyboard}</section>
 
