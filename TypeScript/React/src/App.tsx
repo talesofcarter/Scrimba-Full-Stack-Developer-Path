@@ -5,10 +5,13 @@ import { getRandomWord } from "./utils";
 import Header from "./components/Header";
 import ConfettiContainer from "./components/ConfettiContainer";
 import GameStatus from "./components/GameStatus";
+import LanguageChips from "./components/LanguageChips";
 
 function App() {
   // state values
-  const [currentWord, setCurrentWord] = useState<string>((): string => getRandomWord());
+  const [currentWord, setCurrentWord] = useState<string>((): string =>
+    getRandomWord()
+  );
   const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
 
   // derived values
@@ -28,20 +31,6 @@ function App() {
       prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
     );
   }
-
-  const languagesElement = languages.map((language, index) => {
-    const isLangLost = index < wrongGuessCount;
-    const styles = {
-      backgroundColor: language.backgroundColor,
-      color: language.color,
-    };
-    const className = clsx("chip", isLangLost && "lost");
-    return (
-      <span className={className} style={styles} key={language.name}>
-        {language.name}
-      </span>
-    );
-  });
 
   const letterElements = currentWord.split("").map((letter, index) => {
     const shouldRevealLetter = isGameLost || guessedLetters.includes(letter);
@@ -89,8 +78,7 @@ function App() {
       {<ConfettiContainer isGameWon={isGameWon} />}
       <Header />
       <GameStatus currentWord={currentWord} guessedLetters={guessedLetters} />
-
-      <section className="language-chips">{languagesElement}</section>
+      <LanguageChips languages={languages} wrongGuessCount={wrongGuessCount} />
 
       <section className="hint">{renderRemainingGuesses()}</section>
 

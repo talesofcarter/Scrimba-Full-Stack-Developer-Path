@@ -27,7 +27,7 @@ function GameStatus({
   const isLastGuessIncorrect: boolean | string =
     lastGuessedLetter && !currentWord.includes(lastGuessedLetter);
 
-  const gameStatusClass = clsx("game-status", {
+  const gameStatusClass: string = clsx("game-status", {
     won: isGameWon,
     lost: isGameLost,
     farewell: !isGameOver && isLastGuessIncorrect,
