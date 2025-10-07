@@ -2,14 +2,12 @@ import { useState } from "react";
 import languages from "./languages";
 import clsx from "clsx";
 import { getFarewellText, getRandomWord } from "./utils";
-import Confetti from "react-confetti";
 import Header from "./components/Header";
+import ConfettiContainer from "./components/ConfettiContainer";
 
 function App() {
   // state values
-  const [currentWord, setCurrentWord] = useState<string>((): string =>
-    getRandomWord()
-  );
+  const [currentWord, setCurrentWord] = useState<string>((): string => getRandomWord());
   const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
 
   // derived values
@@ -123,7 +121,7 @@ function App() {
   }
   return (
     <main>
-      {isGameWon && <Confetti />}
+      {<ConfettiContainer isGameWon={isGameWon} />}
       <Header />
       <section className={gameStatusClass}>{renderGameStatus()}</section>
 
