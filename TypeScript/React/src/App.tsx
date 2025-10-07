@@ -7,6 +7,7 @@ import ConfettiContainer from "./components/ConfettiContainer";
 import GameStatus from "./components/GameStatus";
 import LanguageChips from "./components/LanguageChips";
 import WordLetters from "./components/WordLetters";
+import NewGameButton from "./components/NewGameButton";
 
 function App() {
   // state values
@@ -77,12 +78,7 @@ function App() {
       />
 
       <section className="keyboard">{keyboard}</section>
-
-      {isGameOver && (
-        <button onClick={startNewGame} className="new-game">
-          New Game
-        </button>
-      )}
+      <NewGameButton isGameOver={isGameOver} startNewGame={startNewGame} />
     </main>
   );
 }
