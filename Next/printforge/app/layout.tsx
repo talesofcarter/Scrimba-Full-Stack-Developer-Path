@@ -1,6 +1,7 @@
 import "./globals.css";
 import Header from "./components/Header";
 import { Albert_Sans, Montserrat_Alternates } from "next/font/google";
+import Link from "next/link";
 
 const albertSans = Albert_Sans({
   subsets: ["latin"],
@@ -24,7 +25,7 @@ export default function RootLayout({
       <body
         className={`${albertSans.className} ${MontserratAlternates.variable}`}
       >
-        <Header />
+        <Header Link={Link} />
         {children}
       </body>
     </html>

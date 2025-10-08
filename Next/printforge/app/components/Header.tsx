@@ -1,8 +1,12 @@
 import Image from "next/image";
 import logo from "@/public/printforge-logo.svg";
-import type { JSX } from "react";
+import type { ElementType } from "react";
 
-function Header(): JSX.Element {
+type LinkProps = {
+  Link: ElementType;
+};
+
+function Header({ Link }: LinkProps) {
   return (
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-lg">
       <nav
@@ -10,10 +14,15 @@ function Header(): JSX.Element {
         aria-label="Global"
       >
         <div className="-m-1.5 flex items-center gap-2 p-1.5">
-          <span className="sr-only">PrintForge</span>
-          <Image src={logo} alt="PrintForge Logo" width={50} height={50} />
-          <span className="text-2xl font-bold tracking-tight">PrintForge</span>
+          <Link href="/" className="flex items-center gap-2">
+            <span className="sr-only">PrintForge</span>
+            <Image src={logo} alt="PrintForge Logo" width={50} height={50} />
+            <span className="text-2xl font-bold tracking-tight">
+              PrintForge
+            </span>
+          </Link>
         </div>
+
         <div className="flex md:hidden">
           <button
             type="button"
@@ -37,12 +46,18 @@ function Header(): JSX.Element {
           </button>
         </div>
         <div className="hidden md:flex md:gap-x-12">
-          <div className="text-sm font-semibold leading-6 text-gray-900 uppercase">
+          <Link
+            href="/models"
+            className="text-sm font-semibold leading-6 text-gray-900 uppercase"
+          >
             3D Models
-          </div>
-          <div className="text-sm font-semibold leading-6 text-gray-900 uppercase">
+          </Link>
+          <Link
+            href="/about"
+            className="text-sm font-semibold leading-6 text-gray-900 uppercase cursor-pointer"
+          >
             About
-          </div>
+          </Link>
         </div>
       </nav>
     </header>
