@@ -8,6 +8,7 @@ import LanguageChips from "./components/LanguageChips";
 import WordLetters from "./components/WordLetters";
 import NewGameButton from "./components/NewGameButton";
 import Keyboard from "./components/Keyboard";
+import GuessCount from "./components/GuessCount";
 
 function App() {
   // state values
@@ -39,17 +40,14 @@ function App() {
     setGuessedLetters([]);
   }
 
-  function renderRemainingGuesses() {
-    return <p className="hint">Remaining Guesses: {8 - wrongGuessCount}</p>;
-  }
   return (
     <main>
       {<ConfettiContainer isGameWon={isGameWon} />}
       <Header />
       <GameStatus currentWord={currentWord} guessedLetters={guessedLetters} />
       <LanguageChips languages={languages} wrongGuessCount={wrongGuessCount} />
+      <GuessCount wrongGuessCount={wrongGuessCount} />
 
-      <section className="hint">{renderRemainingGuesses()}</section>
       <WordLetters
         currentWord={currentWord}
         guessedLetters={guessedLetters}
