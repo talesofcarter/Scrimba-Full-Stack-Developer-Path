@@ -8,7 +8,9 @@ export default function Home() {
           <p className="hidden text-sm text-gray-600 uppercase md:block">
             Your go-to platform for 3D printing files
           </p>
-          <h1 className="text-4xl font-bold md:text-5xl">{`Discover what's possible with 3D printing`}</h1>
+          <h1 className="text-4xl font-bold md:text-5xl">
+            Discover what&rsquo;s possible with 3D printing
+          </h1>
           <p className="text-lg text-gray-600">
             Join our community of creators and explore a vast library of
             user-submitted models.
